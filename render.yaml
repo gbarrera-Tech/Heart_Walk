@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: heart-walk-registration
+    runtime: node
+    plan: starter
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: DATA_DIR
+        value: /var/data
+      - key: ADMIN_PASSWORD
+        sync: false
+    disk:
+      name: registrations
+      mountPath: /var/data
+      sizeGB: 1

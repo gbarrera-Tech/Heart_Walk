@@ -1,0 +1,13 @@
+{
+  "name": "heart-walk-registration",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Heart Walk event registration form with QR-friendly URL and Excel export",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "engines": { "node": ">=22.13" },
+  "dependencies": { "exceljs": "^4.4.0" }
+}

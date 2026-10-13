@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Heart Walk Registration</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main>
+  <h1>Heart Walk Registration</h1>
+  <p class="lead">Tell us who is coming so we can have your shirt ready.</p>
+  <form id="form" novalidate>
+    <label for="fullName">Full name
+      <input id="fullName" name="fullName" autocomplete="name" required maxlength="120">
+    </label>
+    <label for="contact">Phone number or Employee ID
+      <input id="contact" name="contact" autocomplete="tel" required maxlength="60">
+    </label>
+    <label for="shirtSize">Shirt size
+      <select id="shirtSize" name="shirtSize" required>
+        <option value="">Select a size</option>
+        <option>XS</option><option>S</option><option>M</option><option>L</option>
+        <option>XL</option><option>2XL</option><option>3XL</option><option>4XL</option>
+      </select>
+    </label>
+    <label for="guests">Number of additional guests coming
+      <input id="guests" name="guests" type="number" inputmode="numeric" min="0" max="20" step="1" value="0" required>
+    </label>
+    <p id="msg" class="msg" role="alert"></p>
+    <button id="submit" type="submit">Register</button>
+  </form>
+  <div id="done" class="done" hidden>
+    <h2>You're registered!</h2>
+    <p>Thank you. See you at the Heart Walk.</p>
+  </div>
+</main>
+<script>
+const form = document.getElementById('form'), msg = document.getElementById('msg'), btn = document.getElementById('submit');
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  msg.textContent = ''; msg.className = 'msg';
+  if (!form.reportValidity()) return;
+  btn.disabled = true;
+  try {
+    const r = await fetch('/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(new FormData(form))) });
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
+    form.hidden = true; document.getElementById('done').hidden = false;
+  } catch (err) {
+    msg.textContent = err.message; msg.className = 'msg error'; btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
